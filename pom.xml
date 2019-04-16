@@ -5,7 +5,7 @@
 	
 	<groupId>com.epam</groupId>
 	<artifactId>chat</artifactId>
-	<version>0.1</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 	
 	<name>chat_web</name>
