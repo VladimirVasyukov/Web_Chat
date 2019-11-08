@@ -7,7 +7,7 @@ import java.util.List;
 
 public class XMLMessageDAO implements MessageDAO {
 
-    //XMLDOMParser here
+    //place XMLDOMParser or XMLMessageParser here
 
     @Override
     /**

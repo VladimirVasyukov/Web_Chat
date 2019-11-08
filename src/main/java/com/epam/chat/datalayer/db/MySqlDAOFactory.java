@@ -7,16 +7,16 @@ import com.epam.chat.datalayer.UserDAO;
 /**
  *
  */
-public class OracleDAOFactory extends DAOFactory {
+public class MySqlDAOFactory extends DAOFactory {
 
 
     @Override
     public MessageDAO getMessageDAO() {
-        return new OracleMessageDAO();
+        return new MySqlMessageDAO();
     }
 
     @Override
     public UserDAO getUserDAO() {
-        return new OracleUserDAO();
+        return new MySqlUserDAO();
     }
 }

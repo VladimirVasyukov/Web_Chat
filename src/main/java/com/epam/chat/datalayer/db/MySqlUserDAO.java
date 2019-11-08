@@ -6,7 +6,7 @@ import com.epam.chat.datalayer.dto.User;
 import javax.management.relation.Role;
 import java.util.List;
 
-public class OracleUserDAO implements UserDAO {
+public class MySqlUserDAO implements UserDAO {
 
     @Override
     public void login(User userToLogin) {

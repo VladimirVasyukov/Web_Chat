@@ -8,7 +8,7 @@ import java.util.List;
 
 public class XMLUserDAO implements UserDAO {
 
-    //XMLDomParser here
+    //place XMLDomParser or XMLUserParser here
 
     /**
      * Login user using xml parser
@@ -27,7 +27,6 @@ public class XMLUserDAO implements UserDAO {
     @Override
     public boolean isLoggedIn(User user) {
         throw new UnsupportedOperationException("Implement this method");
-
     }
 
     /**

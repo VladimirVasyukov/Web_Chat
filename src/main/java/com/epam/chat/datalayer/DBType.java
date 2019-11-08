@@ -1,6 +1,6 @@
 package com.epam.chat.datalayer;
 
-import com.epam.chat.datalayer.db.OracleDAOFactory;
+import com.epam.chat.datalayer.db.MySqlDAOFactory;
 import com.epam.chat.datalayer.xml.XMLDAOFactory;
 
 /**
@@ -18,7 +18,7 @@ public enum DBType {
     ORACLE {
         @Override
         public DAOFactory getDAOFactory() {
-            return new OracleDAOFactory();
+            return new MySqlDAOFactory();
         }
     };
 

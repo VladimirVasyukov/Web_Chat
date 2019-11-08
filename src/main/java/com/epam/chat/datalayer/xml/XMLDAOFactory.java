@@ -4,11 +4,7 @@ import com.epam.chat.datalayer.DAOFactory;
 import com.epam.chat.datalayer.MessageDAO;
 import com.epam.chat.datalayer.UserDAO;
 
-/**
- *
- */
 public class XMLDAOFactory extends DAOFactory {
-
 
     @Override
     public MessageDAO getMessageDAO() {

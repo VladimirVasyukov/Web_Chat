@@ -5,12 +5,11 @@ import com.epam.chat.datalayer.dto.Message;
 
 import java.util.List;
 
-public class OracleMessageDAO implements MessageDAO {
+public class MySqlMessageDAO implements MessageDAO {
 
     @Override
     public void sendMessage(Message message) {
         throw new UnsupportedOperationException("Implement this method");
-
     }
 
     @Override
