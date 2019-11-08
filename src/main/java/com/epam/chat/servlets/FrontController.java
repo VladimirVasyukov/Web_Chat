@@ -39,7 +39,7 @@ public class FrontController extends HttpServlet {
 	 * @param commandName
 	 * @return chosen command
 	 */
-	private Command defineCommand(String commandName) {
+	protected Command defineCommand(String commandName) {
 		throw new UnsupportedOperationException("Implement this method");
 	}
 
