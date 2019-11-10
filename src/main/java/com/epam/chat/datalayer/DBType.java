@@ -15,7 +15,7 @@ public enum DBType {
         }
     },
 
-    ORACLE {
+    MySQL {
         @Override
         public DAOFactory getDAOFactory() {
             return new MySqlDAOFactory();
@@ -24,6 +24,7 @@ public enum DBType {
 
     /**
      * Get db type by name
+     *
      * @param dbType type founded by name
      * @return database type
      */
