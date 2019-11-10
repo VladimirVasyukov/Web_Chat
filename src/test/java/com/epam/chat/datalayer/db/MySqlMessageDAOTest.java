@@ -1,4 +1,4 @@
-package com.epam.chat.datalayer.xml;
+package com.epam.chat.datalayer.db;
 
 import com.epam.chat.datalayer.MessageDAO;
 import com.epam.chat.datalayer.dto.Message;
@@ -13,23 +13,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
-public class XMLMessageDAOTest {
+public class MySqlMessageDAOTest {
 
     @Test
-    public void packageLocation_whenExploreTheXMLMessageDAOClass_thenThePathIsCorrect() {
-        assertThat(XMLMessageDAO.class.getPackage().toString(),
-                is(equalTo("package com.epam.chat.datalayer.xml")));
+    public void packageLocation_whenExploreTheMySqlMessageDAOClass_thenThePathIsCorrect() {
+        assertThat(MySqlMessageDAO.class.getPackage().toString(),
+                is(equalTo("package com.epam.chat.datalayer.db")));
     }
 
     @Test
-    public void interface_whenExploreTheXMLMessageDAOClass_thenMessageDAOImplemented() {
-        assertTrue(MessageDAO.class.isAssignableFrom(XMLMessageDAO.class));
+    public void interface_whenExploreTheMySqlMessageDAOClass_thenMessageDAOImplemented() {
+        assertTrue(MessageDAO.class.isAssignableFrom(MySqlMessageDAO.class));
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void getLast_whenExploreTheXMLMessageDAOClass_thenCurrentMethodExists() {
-        Class classToExplore = XMLMessageDAO.class;
+    public void getLast_whenExploreTheMySqlMessageDAOClass_thenCurrentMethodExists() {
+        Class classToExplore = MySqlMessageDAO.class;
         try {
             classToExplore.getDeclaredMethod("getLast", int.class);
         } catch (NoSuchMethodException e) {
@@ -39,8 +39,8 @@ public class XMLMessageDAOTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void sendMessage_whenExploreTheXMLMessageDAOClass_thenCurrentMethodExists() {
-        Class classToExplore = XMLMessageDAO.class;
+    public void sendMessage_whenExploreTheMySqlMessageDAOClass_thenCurrentMethodExists() {
+        Class classToExplore = MySqlMessageDAO.class;
         try {
             classToExplore.getDeclaredMethod("sendMessage", Message.class);
         } catch (NoSuchMethodException e) {
