@@ -15,7 +15,7 @@ public enum DBType {
         }
     },
 
-    MySQL {
+    MYSQL {
         @Override
         public DAOFactory getDAOFactory() {
             return new MySqlDAOFactory();

@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 @RunWith(JUnit4.class)
 public class MySqlDAOFactoryTest {
 
-    private DAOFactory daoFactory = DAOFactory.getInstance(DBType.MySQL);
+    private DAOFactory daoFactory = DAOFactory.getInstance(DBType.MYSQL);
 
     @Test
     public void getMessageDAO_whenMethodCalled_thenReturnXMLImplementation() {

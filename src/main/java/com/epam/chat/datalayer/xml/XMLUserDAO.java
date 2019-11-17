@@ -1,9 +1,9 @@
 package com.epam.chat.datalayer.xml;
 
 import com.epam.chat.datalayer.UserDAO;
+import com.epam.chat.datalayer.dto.Role;
 import com.epam.chat.datalayer.dto.User;
 
-import javax.management.relation.Role;
 import java.util.List;
 
 public class XMLUserDAO implements UserDAO {

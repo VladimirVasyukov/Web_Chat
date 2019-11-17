@@ -11,12 +11,14 @@ public interface MessageDAO {
 
     /**
      * Send a message
+     *
      * @param message - message to send
      */
     void sendMessage(Message message);
 
     /**
      * Get last number of messages
+     *
      * @param count number of last messages to get (sorted by date)
      * @return
      */
