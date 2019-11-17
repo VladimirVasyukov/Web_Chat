@@ -23,12 +23,12 @@ public class DBTypeTest {
 
     @Test(expected = DBTypeException.class)
     public void getTypeByName_whenInputParamIsNull_thenThrowDBTypeException() {
-        assertTrue(DBType.getTypeByName(null).getDAOFactory() instanceof MySqlDAOFactory);
+        DBType.getTypeByName(null).getDAOFactory();
     }
 
     @Test(expected = DBTypeException.class)
     public void getTypeByName_whenInputParamIsUnknownString_thenThrowDBTypeException() {
-        assertTrue(DBType.getTypeByName("Unknown").getDAOFactory() instanceof MySqlDAOFactory);
+        DBType.getTypeByName("Unknown").getDAOFactory();
     }
 
 
