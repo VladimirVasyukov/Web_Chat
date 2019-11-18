@@ -49,11 +49,12 @@ public class XMLUserDAO implements UserDAO {
 
 
     /**
-     * Kick user using xml parser
-     * @param user user we want to kick from system
+     *
+     * @param admin - user responsible for the kick action (with the role admin)
+     * @param kickableUser - user that should be kicked
      */
     @Override
-    public void kick(User user) {
+    public void kick(User admin, User kickableUser) {
         throw new UnsupportedOperationException("Implement this method");
     }
 

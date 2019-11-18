@@ -101,7 +101,7 @@ public class MySqlUserDAOTest {
     public void kick_whenExploreTheMySqlUserDAOClass_thenCurrentMethodExists() {
         Class classToExplore = MySqlUserDAO.class;
         try {
-            classToExplore.getDeclaredMethod("kick", User.class);
+            classToExplore.getDeclaredMethod("kick", User.class, User.class);
         } catch (NoSuchMethodException e) {
             fail("This method should be present from the implemented class here.");
         }

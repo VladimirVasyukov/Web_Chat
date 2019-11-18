@@ -101,7 +101,7 @@ public class XMLUserDAOTest {
     public void kick_whenExploreTheXMLUserDAOClass_thenCurrentMethodExists() {
         Class classToExplore = XMLUserDAO.class;
         try {
-            classToExplore.getDeclaredMethod("kick", User.class);
+            classToExplore.getDeclaredMethod("kick", User.class, User.class);
         } catch (NoSuchMethodException e) {
             fail("This method should be present from the implemented class here.");
         }

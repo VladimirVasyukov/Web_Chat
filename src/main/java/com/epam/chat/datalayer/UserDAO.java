@@ -40,12 +40,13 @@ public interface UserDAO {
      */
     void unkick(User user);
 
+
     /**
-     * User we want to kick
      *
-     * @param user user we want to kick from system
+     * @param admin - user responsible for the kick action (with the role admin)
+     * @param kickableUser - user that should be kicked
      */
-    void kick(User user);
+    void kick(User admin, User kickableUser);
 
     /**
      * Check is user was kicked from system
