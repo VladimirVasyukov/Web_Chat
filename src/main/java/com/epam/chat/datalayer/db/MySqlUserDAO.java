@@ -75,6 +75,15 @@ public class MySqlUserDAO implements UserDAO {
 
     /**
      *
+     * @return
+     */
+    @Override
+    public List<User> getAllKicked() {
+        throw new UnsupportedOperationException("Implement this method");
+    }
+
+    /**
+     *
      * @param nick nick of user to find the role
      * @return
      */

@@ -120,6 +120,17 @@ public class XMLUserDAOTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    public void getAllKicked_whenExploreTheXMLUserDAOClass_thenCurrentMethodExists() {
+        Class classToExplore = XMLUserDAO.class;
+        try {
+            classToExplore.getDeclaredMethod("getAllKicked");
+        } catch (NoSuchMethodException e) {
+            fail("This method should be present from the implemented class here.");
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void getRole_whenExploreTheXMLUserDAOClass_thenCurrentMethodExists() {
         Class classToExplore = XMLUserDAO.class;
         try {

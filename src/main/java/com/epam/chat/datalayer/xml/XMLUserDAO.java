@@ -78,6 +78,15 @@ public class XMLUserDAO implements UserDAO {
     }
 
     /**
+     * Get all kicked users
+     * @return
+     */
+    @Override
+    public List<User> getAllKicked() {
+        throw new UnsupportedOperationException("Implement this method");
+    }
+
+    /**
      * Get role from xml file using parser by user nick
      * @param nick nick of user to find the role
      * @return user role

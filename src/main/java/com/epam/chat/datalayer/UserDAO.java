@@ -64,6 +64,13 @@ public interface UserDAO {
     List<User> getAllLogged();
 
     /**
+     * Get all kicked users
+     *
+     * @return list of users
+     */
+    List<User> getAllKicked();
+
+    /**
      * Get role of user by his nickname
      *
      * @param nick nick of user to find the role
