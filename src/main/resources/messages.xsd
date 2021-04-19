@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.epam.com/chat/messages"
+        xmlns:tns="http://www.epam.com/chat/messages"
+        elementFormDefault="qualified">
+
+    <complexType name="Message">
+        <sequence>
+            <element name="user_from" type="string"/>
+            <element name="time_stamp" type="dateTime"/>
+            <element name="message" type="string" minOccurs="0"/>
+            <element name="status" type="tns:Status"/>
+        </sequence>
+    </complexType>
+
+    <simpleType name="Status">
+        <restriction base="string">
+            <enumeration value="LOGIN"/>
+            <enumeration value="MESSAGE"/>
+            <enumeration value="KICK"/>
+            <enumeration value="LOGOUT"/>
+        </restriction>
+    </simpleType>
+
+    <element name="messages">
+        <complexType>
+            <sequence>
+                <element name="message"
+                         type="tns:Message"
+                         maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+
+</schema>

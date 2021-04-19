@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<messages xmlns="http://www.epam.com/chat/messages"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.epam.com/chat/messages messages.xsd">
+
+    <message>
+        <user_from>Vladimir</user_from>
+        <time_stamp>2021-04-15T18:45:59</time_stamp>
+        <status>LOGIN</status>
+    </message>
+
+    <message>
+        <user_from>Vladimir</user_from>
+        <time_stamp>2021-04-15T18:57:33</time_stamp>
+        <message>Hello world!</message>
+        <status>MESSAGE</status>
+    </message>
+
+    <message>
+        <user_from>Olga</user_from>
+        <time_stamp>2021-04-15T19:02:39</time_stamp>
+        <status>LOGIN</status>
+    </message>
+
+    <message>
+        <user_from>Admin</user_from>
+        <time_stamp>2021-04-15T19:05:13</time_stamp>
+        <message>Vladimir</message>
+        <status>KICK</status>
+    </message>
+
+    <message>
+        <user_from>Olga</user_from>
+        <time_stamp>2021-04-15T19:07:44</time_stamp>
+        <status>LOGOUT</status>
+    </message>
+
+</messages>

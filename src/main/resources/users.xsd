@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.epam.com/chat/users"
+        xmlns:tns="http://www.epam.com/chat/users"
+        elementFormDefault="qualified">
+
+    <complexType name="User">
+        <sequence>
+            <element name="nick" type="string"/>
+            <element name="role" type="tns:Role"/>
+        </sequence>
+    </complexType>
+
+    <simpleType name="Role">
+        <restriction base="string">
+            <enumeration value="ADMIN"/>
+            <enumeration value="USER"/>
+        </restriction>
+    </simpleType>
+
+    <element name="users">
+        <complexType>
+            <sequence>
+                <element name="user"
+                         type="tns:User"
+                         maxOccurs="unbounded"/>
+            </sequence>
+        </complexType>
+    </element>
+
+</schema>

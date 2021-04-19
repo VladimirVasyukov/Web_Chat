@@ -8,12 +8,12 @@ public class XMLDAOFactory extends DAOFactory {
 
     @Override
     public MessageDAO getMessageDAO() {
-        return new XMLMessageDAO();
+        return new XMLMessageDAO(new XMLProcessor());
     }
 
     @Override
     public UserDAO getUserDAO() {
-        return new XMLUserDAO();
+        return new XMLUserDAO(new XMLProcessor());
     }
 
 }
