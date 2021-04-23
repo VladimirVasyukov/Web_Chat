@@ -29,10 +29,10 @@ public class XMLMessageDAO implements MessageDAO {
     private static final Logger LOG = LogManager.getLogger(XMLMessageDAO.class.getName());
     private final XMLProcessor xmlProcessor;
 
+
     public XMLMessageDAO(XMLProcessor xmlProcessor) {
         this.xmlProcessor = xmlProcessor;
     }
-
 
     /**
      * Get last messages from xml file using parser
@@ -61,8 +61,7 @@ public class XMLMessageDAO implements MessageDAO {
             }
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't create message list because XML Messages file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_MESSAGE_LIST_ERROR, e);
         }
         return messages;
     }
@@ -81,14 +80,14 @@ public class XMLMessageDAO implements MessageDAO {
             xmlProcessor.updateMessagesXML(document);
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't send message because XML Messages file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_MESSAGE_SEND_ERROR, e);
         }
     }
 
     private User getUserFromXML(Element message) {
         String userFromNicknameInXML = xmlProcessor.getChildValue(message, USER_FROM);
-        Role userFromRole = new XMLUserDAO(xmlProcessor).getRole(userFromNicknameInXML);
+        Role userFromRole = new XMLUserDAO(xmlProcessor, new XMLMessageDAO(xmlProcessor)).
+            getRole(userFromNicknameInXML);
         return new User(userFromNicknameInXML, userFromRole);
     }
 

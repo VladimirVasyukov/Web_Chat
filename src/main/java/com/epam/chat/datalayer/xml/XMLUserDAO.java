@@ -32,9 +32,11 @@ public class XMLUserDAO implements UserDAO {
     private static final Role USER_ROLE = Role.USER;
     private static final boolean FALSE = false;
     private final XMLProcessor xmlProcessor;
+    private final XMLMessageDAO xmlMessageDAO;
 
-    public XMLUserDAO(XMLProcessor xmlProcessor) {
+    public XMLUserDAO(XMLProcessor xmlProcessor, XMLMessageDAO xmlMessageDAO) {
         this.xmlProcessor = xmlProcessor;
+        this.xmlMessageDAO = xmlMessageDAO;
     }
 
     /**
@@ -49,13 +51,12 @@ public class XMLUserDAO implements UserDAO {
                 addNewUserXML(userToLogin);
             }
             if (!isKicked(userToLogin)) {
-                new XMLMessageDAO(xmlProcessor).
-                    sendMessage(new Message(userToLogin, LocalDateTime.now(), EMPTY_TEXT, Status.LOGIN));
+                xmlMessageDAO.sendMessage(
+                    new Message(userToLogin, LocalDateTime.now(), EMPTY_TEXT, Status.LOGIN));
             }
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't login user because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_LOGIN_ERROR, e);
         }
     }
 
@@ -76,8 +77,7 @@ public class XMLUserDAO implements UserDAO {
             return isLoggedIn;
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't check if user is logged in because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_LOGGED_CHECK_ERROR, e);
         }
     }
 
@@ -90,13 +90,12 @@ public class XMLUserDAO implements UserDAO {
         try {
             Element userElement = findUserXML(userToLogout.getNickname());
             if (userElement != null) {
-                new XMLMessageDAO(xmlProcessor).
-                    sendMessage(new Message(userToLogout, LocalDateTime.now(), EMPTY_TEXT, Status.LOGOUT));
+                xmlMessageDAO.sendMessage(
+                    new Message(userToLogout, LocalDateTime.now(), EMPTY_TEXT, Status.LOGOUT));
             }
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't logout user because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_LOGOUT_ERROR, e);
         }
     }
 
@@ -119,8 +118,7 @@ public class XMLUserDAO implements UserDAO {
             }
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't unkick user because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_UNCKICK_ERROR, e);
         }
     }
 
@@ -135,14 +133,14 @@ public class XMLUserDAO implements UserDAO {
             try {
                 String userNickname = kickableUser.getNickname();
                 Element userElement = findUserXML(userNickname);
-                if (userElement != null) {
-                    new XMLMessageDAO(xmlProcessor).sendMessage(
+                if (!isKicked(kickableUser) && userElement != null) {
+                    xmlMessageDAO.sendMessage(
                         new Message(admin, LocalDateTime.now(), kickableUser.getNickname(), Status.KICK));
+                    logout(kickableUser);
                 }
             } catch (FileNotFoundException e) {
                 LOG.error(e.getMessage(), e);
-                throw new XMLException(
-                    "Can't kick user because XML file is not found or damaged", e);
+                throw new XMLException(XMLException.XML_USER_KICK_ERROR, e);
             }
         }
     }
@@ -165,8 +163,7 @@ public class XMLUserDAO implements UserDAO {
             }
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't check if user is kicked because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_KICKED_CHECK_ERROR, e);
         }
         return isKicked;
     }
@@ -178,11 +175,10 @@ public class XMLUserDAO implements UserDAO {
     @Override
     public List<User> getAllLogged() {
         try {
-            return getUserList(getUserLoginMap());
+            return getUserLoginList(getUserLoginMap());
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't create logged in user list because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_LOGGED_LIST_ERROR, e);
         }
     }
 
@@ -193,11 +189,10 @@ public class XMLUserDAO implements UserDAO {
     @Override
     public List<User> getAllKicked() {
         try {
-            return getUserList(getUserKickMap());
+            return getUserKickList();
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't create kicked user list because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_KICKED_LIST_ERROR, e);
         }
     }
 
@@ -218,8 +213,7 @@ public class XMLUserDAO implements UserDAO {
             return userRole;
         } catch (FileNotFoundException e) {
             LOG.error(e.getMessage(), e);
-            throw new XMLException(
-                "Can't create get user role because XML file is not found or damaged", e);
+            throw new XMLException(XMLException.XML_USER_GET_ROLE_ERROR, e);
         }
     }
 
@@ -294,16 +288,16 @@ public class XMLUserDAO implements UserDAO {
         return messageElement;
     }
 
-    private List<User> getUserList(Map<String, Boolean> soughtUserMap) throws FileNotFoundException {
+    private List<User> getUserLoginList(Map<String, Boolean> soughtUserMap) throws FileNotFoundException {
         Map<String, Role> userRoles = getUserRoleMap();
-        List<User> soughtUserList = new ArrayList<>();
+        List<User> userLoginList = new ArrayList<>();
         for (Map.Entry<String, Boolean> user : soughtUserMap.entrySet()) {
-            if (user.getValue().equals(true)) {
+            if (user.getValue()) {
                 String nickname = user.getKey();
-                soughtUserList.add(new User(nickname, userRoles.get(nickname)));
+                userLoginList.add(new User(nickname, userRoles.get(nickname)));
             }
         }
-        return soughtUserList;
+        return userLoginList;
     }
 
     private Map<String, Role> getUserRoleMap() throws FileNotFoundException {
@@ -354,32 +348,24 @@ public class XMLUserDAO implements UserDAO {
         return userLoginMap;
     }
 
-    private Map<String, Boolean> getUserKickMap() throws FileNotFoundException {
+    private List<User> getUserKickList() throws FileNotFoundException {
         Document messagesDocument = xmlProcessor.parseMessagesXML();
         NodeList messageNodeList = messagesDocument.getElementsByTagName(MESSAGE);
         int messageNodeListLength = messageNodeList.getLength();
 
-        Map<String, Boolean> userKickMap = new HashMap<>();
+        Map<String, Role> userRoles = getUserRoleMap();
+        List<User> userKickList = new ArrayList<>();
         for (int i = messageNodeListLength - 1; i >= 0; i--) {
             Element messageElement = (Element) messageNodeList.item(i);
 
-            String nickname = xmlProcessor.getChildValue(messageElement, USER_FROM);
             Status xmlMessageStatus = xmlProcessor.getEnumValueFromString(
                 xmlProcessor.getChildValue(messageElement, STATUS), Status.values());
 
-            boolean alreadyCheckedUser = userKickMap.containsKey(nickname);
-            if (!alreadyCheckedUser) {
-                userKickMap.put(nickname, false);
-            }
-
             if (xmlMessageStatus == Status.KICK) {
-                nickname = xmlProcessor.getChildValue(messageElement, TEXT);
-                alreadyCheckedUser = userKickMap.containsKey(nickname);
-                if (!alreadyCheckedUser) {
-                    userKickMap.put(nickname, true);
-                }
+                String nickname = xmlProcessor.getChildValue(messageElement, TEXT);
+                userKickList.add(new User(nickname, userRoles.get(nickname)));
             }
         }
-        return userKickMap;
+        return userKickList;
     }
 }
