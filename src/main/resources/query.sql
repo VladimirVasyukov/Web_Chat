@@ -99,3 +99,28 @@ FROM
     Role ON User.RoleID = Role.ID
 WHERE
     User.Nick = @userInQuestion;
+
+    --Get user by nickname
+SET @userInQuestion := 'Vladimir';
+SELECT
+    User.Nick AS Nickname, Role.Title AS Role
+FROM
+    User
+        JOIN
+    Role ON User.RoleID = Role.ID
+WHERE
+    User.Nick = @userInQuestion;
+
+    --Get all users order ty nickname
+SELECT
+    User.Nick AS Nickname, Role.Title AS Role
+FROM
+    User
+        JOIN
+    Role ON User.RoleID = Role.ID
+ORDER BY User.Nick;
+
+    --Add new user
+SET @newUserNickname := 'Olga';
+SET @newUserRole = 2;
+INSERT INTO User VALUES (@newUserNickname, @newUserRole);
