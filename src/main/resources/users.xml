@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<users xmlns="http://www.epam.com/chat/users"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.epam.com/chat/users users.xsd">
+
+    <user>
+        <nick>Vladimir</nick>
+        <role>USER</role>
+    </user>
+
+    <user>
+        <nick>Olga</nick>
+        <role>USER</role>
+    </user>
+
+    <user>
+        <nick>Administrator</nick>
+        <role>ADMIN</role>
+    </user>
+
+</users>
