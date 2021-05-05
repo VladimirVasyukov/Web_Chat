@@ -118,9 +118,14 @@ public class MySqlUserDAO implements UserDAO {
                 if (isKickedUserLoggedIn(connection, kickableUser)) {
                     logoutKickedUser(connection, kickableUser);
                 }
-
-                connection.commit();
-                connection.setAutoCommit(true);
+                try (connection) {
+                    connection.commit();
+                    connection.setAutoCommit(true);
+                } catch (SQLException e) {
+                    LOG.error(e.getMessage(), e);
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                }
             } catch (ConnectionPoolException | SQLException e) {
                 LOG.error(e.getMessage(), e);
                 throw new MySQLException(MySQLException.USER_KICK_ERROR, e);
