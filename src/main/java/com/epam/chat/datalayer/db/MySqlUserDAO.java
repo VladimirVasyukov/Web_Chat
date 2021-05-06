@@ -110,6 +110,7 @@ public class MySqlUserDAO implements UserDAO {
      */
     @Override
     public void kick(User admin, User kickableUser) {
+        String sqlQuery = queryManager.getValue(KICK);
         if (admin.getRole() == Role.ADMIN) {
             try (Connection connection = connectionPool.takeConnection()) {
                 connection.setAutoCommit(false);
@@ -118,9 +119,10 @@ public class MySqlUserDAO implements UserDAO {
                 if (isKickedUserLoggedIn(connection, kickableUser)) {
                     logoutKickedUser(connection, kickableUser);
                 }
-                try (connection) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
                     connection.commit();
                     connection.setAutoCommit(true);
+                    preparedStatement.executeUpdate();
                 } catch (SQLException e) {
                     LOG.error(e.getMessage(), e);
                     connection.rollback();
