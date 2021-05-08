@@ -121,12 +121,12 @@ public class MySqlUserDAO implements UserDAO {
                     }
                 } catch (SQLException e) {
                     connection.rollback();
+                    throw new MySQLException(MySQLException.USER_KICK_ERROR, e);
                 } finally {
                     connection.setAutoCommit(true);
                 }
             } catch (ConnectionPoolException | SQLException e) {
                 LOG.error(e.getMessage(), e);
-                throw new MySQLException(MySQLException.USER_KICK_ERROR, e);
             }
         }
     }
