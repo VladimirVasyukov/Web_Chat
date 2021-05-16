@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public class Processor {
@@ -32,10 +33,10 @@ public class Processor {
     private static final String MESSAGES_ATTRIBUTE = "messages";
     private static final String NICKNAME_ATTRIBUTE = "nickname";
     private static final String ADMIN_NAME_DOMEN = "@epam.com";
-    private static final String EMPTY_MESSAGE_TEXT = "";
-    private static final String CHAT_PATH = "WEB-INF/pages/chat.jsp";
-    private static final String ERROR_PATH = "WEB-INF/pages/error.jsp";
-    private static final String LOGIN_PATH = "WEB-INF/pages/login.jsp";
+    private static final String CHAT_PATH = "chat";
+    private static final String ERROR_PATH = "error";
+    private static final String LOGIN_PATH = "login";
+    private static final String MESSAGE_LIST_PATH = "message-list";
     private static final String IS_LOGGED_IN_ERROR = "Sorry, user with same nickname is already logged in";
     private static final String NICKNAME_LENGTH_ERROR = "Nickname must be more than 2 characters";
     private static final int MIN_NICKNAME_LENGTH = 2;
@@ -67,8 +68,9 @@ public class Processor {
         throws ServletException, IOException {
         MessageDAO messageDAO = getMessageDAOServletRequest(request);
         List<Message> messageList = messageDAO.getLast(Integer.parseInt(request.getParameter(MESSAGE_COUNT)));
+        Collections.reverse(messageList);
         request.setAttribute(MESSAGES_ATTRIBUTE, messageList);
-        request.getRequestDispatcher(CHAT_PATH).forward(request, response);
+        request.getRequestDispatcher(MESSAGE_LIST_PATH).forward(request, response);
     }
 
     public void login(HttpServletRequest request, HttpServletResponse response)
@@ -84,6 +86,8 @@ public class Processor {
 
         if (userDAO.isLoggedIn(user)) {
             request.setAttribute(ERROR_ATTRIBUTE, IS_LOGGED_IN_ERROR);
+        } else {
+            userDAO.login(user);
         }
 
         if (request.getAttribute(ERROR_ATTRIBUTE) == null) {
@@ -91,8 +95,6 @@ public class Processor {
             session.setAttribute(NICKNAME_ATTRIBUTE, userNickname);
             SessionListener.addUserSession(userNickname, session);
 
-            MessageDAO messageDAO = getMessageDAOServletRequest(request);
-            messageDAO.sendMessage(new Message(user, LocalDateTime.now(), EMPTY_MESSAGE_TEXT, Status.LOGIN));
             response.sendRedirect(CHAT_PATH);
         } else {
             request.getRequestDispatcher(ERROR_PATH).forward(request, response);

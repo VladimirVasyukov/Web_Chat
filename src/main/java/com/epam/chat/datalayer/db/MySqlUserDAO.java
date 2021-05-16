@@ -187,7 +187,7 @@ public class MySqlUserDAO implements UserDAO {
             }
         } catch (ConnectionPoolException | SQLException e) {
             LOG.error(e.getMessage(), e);
-            throw new MySQLException(MySQLException.USER_GET_ROLE_ERROR, e);
+            return null;
         }
     }
 

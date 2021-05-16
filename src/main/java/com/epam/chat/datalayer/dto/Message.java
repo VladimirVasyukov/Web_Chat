@@ -56,11 +56,18 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-            "userFrom=" + userFrom +
-            ", timeStamp=" + timeStamp +
-            ", status=" + status +
-            ", text='" + messageText + '\'' +
-            '}';
+        String text;
+        String space = " ";
+
+        if (status == Status.LOGIN) {
+            text = "вошёл в чат";
+        } else if (status == Status.LOGOUT) {
+            text = "вышел из чата";
+        } else if (status == Status.KICK) {
+            text = "кикнул" + space + messageText;
+        } else {
+            text = messageText;
+        }
+        return timeStamp.toString().replace("T", space) + space + userFrom.getNickname() + ":" + space + text;
     }
 }

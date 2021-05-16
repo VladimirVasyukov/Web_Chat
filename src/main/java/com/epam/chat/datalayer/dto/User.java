@@ -9,10 +9,16 @@ import java.util.Objects;
 public class User {
     private final String nickname;
     private final Role role;
+    private final Boolean kicked;
 
-    public User(String nickname, Role role) {
+    public User(String nickname, Role role, Boolean kicked) {
         this.nickname = nickname;
         this.role = role;
+        this.kicked = kicked;
+    }
+
+    public User(String nickname, Role role) {
+        this(nickname, role, false);
     }
 
     public String getNickname() {
@@ -21,6 +27,14 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    public boolean isAdmin() {
+        return getRole() == Role.ADMIN;
+    }
+
+    public boolean isKicked() {
+        return kicked;
     }
 
     @Override

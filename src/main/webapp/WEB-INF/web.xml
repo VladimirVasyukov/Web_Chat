@@ -35,6 +35,16 @@
     </servlet-mapping>
 
     <servlet>
+        <display-name>MessageList</display-name>
+        <servlet-name>MessageList</servlet-name>
+        <jsp-file>/WEB-INF/pages/message-list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MessageList</servlet-name>
+        <url-pattern>/message-list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <display-name>Chat</display-name>
         <servlet-name>Chat</servlet-name>
         <jsp-file>/WEB-INF/pages/chat.jsp</jsp-file>

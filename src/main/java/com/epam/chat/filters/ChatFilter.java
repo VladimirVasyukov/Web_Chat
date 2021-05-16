@@ -2,11 +2,16 @@ package com.epam.chat.filters;
 
 import com.epam.chat.datalayer.DAOFactory;
 import com.epam.chat.datalayer.DBType;
+import com.epam.chat.datalayer.MessageDAO;
 import com.epam.chat.datalayer.UserDAO;
+import com.epam.chat.datalayer.dto.Message;
 import com.epam.chat.datalayer.dto.Role;
 import com.epam.chat.datalayer.dto.User;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -52,6 +57,22 @@ public class ChatFilter implements Filter {
         if (httpRequest.getAttribute(ERROR_ATTRIBUTE) != null) {
             httpRequest.getRequestDispatcher(ERROR_PATH).forward(httpRequest, response);
         } else {
+            MessageDAO messageDAO = daoFactory.getMessageDAO();
+            List<Message> messages = messageDAO.getLast(30);
+            Collections.reverse(messages);
+            request.setAttribute("messages", messages);
+
+            UserDAO getUserDAO = daoFactory.getUserDAO();
+            List<User> users = getUserDAO.getAllLogged();
+            List<User> mappedUsers = users
+                .stream()
+                .map(u -> new User(u.getNickname(), u.getRole(), getUserDAO.isKicked(u)))
+                .collect(Collectors.toList());
+            request.setAttribute("users", mappedUsers);
+
+            User currentUser = getCurrentUser(httpRequest, userDAO);
+            request.setAttribute("currentUser", currentUser);
+
             chain.doFilter(request, response);
         }
     }
@@ -61,12 +82,20 @@ public class ChatFilter implements Filter {
 
     }
 
-    private void checkSessionErrors(HttpServletRequest httpRequest, UserDAO userDAO) {
+    private User getCurrentUser(HttpServletRequest httpRequest, UserDAO userDAO) {
         HttpSession session = httpRequest.getSession(false);
         if (session != null && session.getAttribute(USER_NICKNAME_ATTRIBUTE) != null) {
             String userNickname = (String) session.getAttribute(USER_NICKNAME_ATTRIBUTE);
             Role userRole = userDAO.getRole(userNickname);
-            User user = new User(userNickname, userRole);
+            return new User(userNickname, userRole);
+        }
+
+        throw new IllegalArgumentException();
+    }
+
+    private void checkSessionErrors(HttpServletRequest httpRequest, UserDAO userDAO) {
+        try {
+            User user = getCurrentUser(httpRequest, userDAO);
             boolean isLoggedIn = userDAO.isLoggedIn(user);
             boolean isKicked = userDAO.isKicked(user);
 
@@ -77,9 +106,9 @@ public class ChatFilter implements Filter {
             if (isKicked) {
                 httpRequest.setAttribute(ERROR_ATTRIBUTE, IS_KICKED_ERROR);
             }
-        } else {
+
+        } catch (IllegalArgumentException e) {
             httpRequest.setAttribute(ERROR_ATTRIBUTE, NOT_LOGGED_IN_ERROR);
         }
     }
-
 }
