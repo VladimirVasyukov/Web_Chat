@@ -140,6 +140,19 @@
                                  </c:if>
                              </c:if>
                          </c:if>
+                         <c:if test="${currentUser.isAdmin()}">
+                              <c:if test="${user.isKicked()}">
+                                      <form
+                                          method="post"
+                                          action='<c:url value="/controller?cmd=unkick&nickname=${currentUser.getNickname()}&kickedUser=${user.getNickname()}" />'
+
+                                          style="display: inline;"
+                                      >
+                                         <button>O</button>
+                                      </form>
+
+                              </c:if>
+                         </c:if>
                     </li>
                 </c:forEach>
             </ul>

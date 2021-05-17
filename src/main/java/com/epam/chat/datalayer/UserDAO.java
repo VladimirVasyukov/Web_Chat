@@ -78,4 +78,11 @@ public interface UserDAO {
      */
     Role getRole(String nick);
 
+    /**
+     * Get kicked and logged in users
+     *
+     * @return list of users
+     */
+    List<User> getAll();
+
 }

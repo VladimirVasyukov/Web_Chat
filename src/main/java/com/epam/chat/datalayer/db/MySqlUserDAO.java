@@ -26,6 +26,7 @@ public class MySqlUserDAO implements UserDAO {
     private static final String IS_KICKED = "isKicked";
     private static final String GET_ALL_LOGGED = "getAllLogged";
     private static final String GET_ALL_KICKED = "getAllKicked";
+    private static final String GET_ALL_USERS = "getAll";
     private static final String GET_ROLE = "getRole";
     private static final String ADD_USER = "addUser";
     private static final String IS_LOGGED_IN_COLUMN = "IsLoggedIn";
@@ -171,6 +172,14 @@ public class MySqlUserDAO implements UserDAO {
     }
 
     /**
+     * @return all kicked and all logged in users
+     */
+    @Override
+    public List<User> getAll() {
+        return getUserList(GET_ALL_USERS, MySQLException.USER_KICKED_LIST_ERROR);
+    }
+
+    /**
      * @param nick nick of user to find the role
      * @return user role
      */
@@ -186,7 +195,6 @@ public class MySqlUserDAO implements UserDAO {
                 return Role.getRoleByID(resultSet.getInt(ROLE_ID_COLUMN));
             }
         } catch (ConnectionPoolException | SQLException e) {
-            LOG.error(e.getMessage(), e);
             return null;
         }
     }

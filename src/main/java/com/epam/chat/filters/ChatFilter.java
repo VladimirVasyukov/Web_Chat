@@ -63,7 +63,8 @@ public class ChatFilter implements Filter {
             request.setAttribute("messages", messages);
 
             UserDAO getUserDAO = daoFactory.getUserDAO();
-            List<User> users = getUserDAO.getAllLogged();
+
+            List<User> users = getUserDAO.getAll();
             List<User> mappedUsers = users
                 .stream()
                 .map(u -> new User(u.getNickname(), u.getRole(), getUserDAO.isKicked(u)))

@@ -197,6 +197,20 @@ public class XMLUserDAO implements UserDAO {
     }
 
     /**
+     * Get all kicked users
+     * @return all kicked users from xml file
+     */
+    @Override
+    public List<User> getAll() {
+        try {
+            return getUserKickList();
+        } catch (FileNotFoundException e) {
+            LOG.error(e.getMessage(), e);
+            throw new XMLException(XMLException.XML_USER_KICKED_LIST_ERROR, e);
+        }
+    }
+
+    /**
      * Get role from xml file using parser by user nick
      * @param nick nick of user to find the role
      * @return user role
